@@ -6,6 +6,8 @@ import cv2
 import pytesseract
 import shutil
 
+pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
+
 app = Flask(__name__)
 app.secret_key = 'secret'
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
