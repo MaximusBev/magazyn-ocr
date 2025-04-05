@@ -1,25 +1,22 @@
-# Вихідний образ з Python та apt
+# Базовий образ із підтримкою Python і системних бібліотек
 FROM python:3.11-slim
 
-# Оновлення системи і встановлення Tesseract + залежностей
-RUN apt-get update && apt-get install -y \
-    tesseract-ocr \
-    libglib2.0-0 \
-    libsm6 \
-    libxrender1 \
-    libxext6 \
-    && rm -rf /var/lib/apt/lists/*
+# Встановлення системних залежностей
+RUN apt-get update && \
+    apt-get install -y tesseract-ocr libgl1-mesa-glx && \
+    rm -rf /var/lib/apt/lists/*
 
-# Копіюємо файли в контейнер
+# Створення робочої директорії
 WORKDIR /app
+
+# Копіюємо проєкт
 COPY . .
 
-# Встановлюємо Python залежності
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+# Встановлення Python-залежностей
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Відкриваємо порт
-EXPOSE 5000
+EXPOSE 8000
 
-# Запускаємо додаток
-CMD ["python", "app.py"]
+# Команда запуску (через gunicorn)
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app:app"]
