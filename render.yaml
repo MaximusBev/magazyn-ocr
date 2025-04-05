@@ -1,8 +1,9 @@
 services:
   - type: web
     name: magazyn-ocr
-    env: docker
-    plan: free
-    autoDeploy: true
-    buildCommand: ""
-    startCommand: ""
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python app.py
+    preInstallCommand: |
+      apt-get update && \
+      apt-get install -y libgl1
