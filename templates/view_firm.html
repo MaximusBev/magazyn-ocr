@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Zawartość folderu – Magazyn OCR</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #1e1e2f;
+      color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #2b2b40;
+      padding: 20px;
+      text-align: center;
+      color: #ffb400;
+      animation: slideDown 0.5s ease-in-out;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      background-color: #29293d;
+      padding: 12px;
+      gap: 24px;
+    }
+    nav a {
+      color: #f0f0f0;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s, transform 0.2s;
+    }
+    nav a:hover {
+      color: #ffb400;
+      transform: scale(1.05);
+    }
+    .container {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    h2 {
+      color: #ffb400;
+      animation: fadeIn 1s ease-in-out;
+    }
+    .delete-all {
+      margin-bottom: 20px;
+      text-align: right;
+    }
+    .delete-all form {
+      display: inline;
+    }
+    .delete-all button {
+      background: #e74c3c;
+      border: none;
+      padding: 10px 16px;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .delete-all button:hover {
+      background: #c0392b;
+    }
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .gallery-item {
+      background: #2b2b40;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      width: 220px;
+      position: relative;
+    }
+    .gallery-item a {
+      display: block;
+    }
+    .gallery-item img {
+      width: 100%;
+      border-radius: 6px;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+    .gallery-item img:hover {
+      transform: scale(1.05);
+    }
+    .message {
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      animation: fadeIn 1s ease-in-out;
+    }
+    .success {
+      background-color: #28a745;
+      color: white;
+    }
+    .error {
+      background-color: #dc3545;
+      color: white;
+    }
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background: #29293d;
+      color: #888;
+      font-size: 14px;
+      margin-top: 40px;
+    }
+    .footer a {
+      color: #ffb400;
+      text-decoration: none;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    @keyframes slideDown {
+      from {transform: translateY(-100%); opacity: 0;}
+      to {transform: translateY(0); opacity: 1;}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Zawartość folderu: {{ firm }}</h1>
+  </header>
+
+  <nav>
+    <a href="/">Dodaj zdjęcie</a>
+    <a href="/zamowienia">Zarządzaj folderami</a>
+    <a href="/search">Wyszukaj tekst</a>
+  </nav>
+
+  <div class="container">
+    <div class="delete-all">
+      <form method="POST" action="/delete_all_images/{{ firm }}" onsubmit="return confirm('Czy na pewno chcesz usunąć wszystkie zdjęcia z folderu {{ firm }}?')">
+        <button type="submit">Usuń wszystkie zdjęcia</button>
+      </form>
+    </div>
+
+    <h2>Zdjęcia w folderze</h2>
+    <div class="gallery">
+      {% for image in images %}
+        <div class="gallery-item">
+          <a href="{{ url_for('static', filename=image) }}" target="_blank">
+            <img src="{{ url_for('static', filename=image) }}" alt="Zdjęcie">
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 <a href="https://hoxa.pl/en/home/" target="_blank">Hoxa Bogdan Masny</a>. Wszelkie prawa zastrzeżone.
+  </div>
+
+  <script>
+    setTimeout(() => {
+      document.querySelectorAll('.message').forEach(msg => {
+        msg.style.transition = 'opacity 0.5s ease';
+        msg.style.opacity = '0';
+        setTimeout(() => msg.remove(), 500);
+      });
+    }, 4000);
+  </script>
+</body>
+</html>
